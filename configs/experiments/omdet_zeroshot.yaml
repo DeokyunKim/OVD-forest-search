@@ -1,0 +1,15 @@
+# The zero-shot arm: the published base weights, measured under the same frozen
+# protocol as the fine-tuned cells. The paper reports both, and the presence of
+# an adapter is the only difference between them -- so this file differs from
+# omdet_seed0.yaml by one line.
+
+model: omdet
+seed: 0                # unused: no training happens on this arm
+
+eval:
+  arm: zeroshot
+  conditions:
+    - A1_singleton_person
+    - A4_full_v6
+  label: swin-tiny-zeroshot
+  per_dataset: true

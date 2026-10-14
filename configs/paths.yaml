@@ -1,0 +1,43 @@
+# Where the corpora and the outputs live.
+#
+# Nothing in the code holds an absolute path. Every value here may be overridden
+# by an environment variable of the same name in upper case with a `UC_` prefix
+# (`UC_DATA_ROOT`, `UC_OUTPUT_ROOT`, ...), which is what CI and multi-machine
+# setups should use.
+#
+# The defaults are repo-relative on purpose: a fresh clone runs against
+# `data/`, and `./link_datasets.sh` fills that directory with symlinks to
+# wherever the corpora actually sit. Copying tens of thousands of frames to make
+# a path line up is never necessary.
+
+# Root of the three corpora. Each key below is resolved against it unless it is
+# itself absolute.
+data_root: data
+
+datasets:
+  # ForestPersons -- publicly released; see DATA.md.
+  forest_persons: forest_persons
+  # ForestBelongings -- release pending; see DATA.md.
+  forest_belongings: forest_belongings
+  # COCO 2017, used for the zero-shot retention measurement only.
+  coco: coco
+  # The 6-class benchmark built from the two forest corpora by
+  # `prepare.py`. This is what every evaluation reads.
+  benchmark: v6_fp_fb
+
+# Everything a run writes. Kept outside the package so a clone stays clean and
+# `git status` after a full campaign is still readable.
+output_root: outputs
+
+outputs:
+  fragments: fragments          # one JSON per (model, checkpoint, condition)
+  detection_dumps: detection_dumps   # raw boxes, v6_npz.1
+  analysis: analysis            # flip metrics and their sweeps
+  tables: tables
+  figures: figures
+  logs: logs
+
+# Model weights and LoRA adapters. Base checkpoints are downloaded from their
+# original sources (see models/*/README.md); adapters are produced
+# by the training scripts.
+checkpoint_root: checkpoints

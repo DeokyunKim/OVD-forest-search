@@ -1,0 +1,45 @@
+# Query-sensitivity reproduction, fine-tuned, seed 0.
+#
+# The 21 conditions below are every query the sensitivity tables are built from:
+# `person` alone, each belonging alone, each belonging paired with `person`, the
+# full evaluation vocabulary, and the renaming variants. Running this file
+# measures all of them under the frozen protocol -- one card, in sequence.
+#
+#   python eval.py --config configs/reproduce/glip_seed0.yaml
+#
+# On several cards, run one arm per card rather than splitting a config.
+
+model: glip
+seed: 0
+
+train:
+  steps: 5667
+  lora: {rank: 16, alpha: 32}
+
+eval:
+  conditions:
+    - A1_singleton_person
+    - A1_singleton_clothes
+    - A1_singleton_hat
+    - A1_singleton_shoes
+    - A1_singleton_gloves
+    - A1_singleton_bag
+    - A2_pair_person_clothes
+    - A2_pair_person_hat
+    - A2_pair_person_shoes
+    - A2_pair_person_gloves
+    - A2_pair_person_bag
+    - A4_full_v6
+    - B1_person_as_human
+    - B2_person_as_people
+    - B3_person_as_hiker
+    - B4_person_as_missing_person
+    - B5_person_as_victim
+    - B6_person_as_body
+    - B7_clothes_as_clothing
+    - B8_clothes_as_garment
+    - B9_clothes_as_jacket
+  label: tiny_c-ft-seed0
+  per_dataset: false
+
+output_dir: checkpoints/glip/seed0

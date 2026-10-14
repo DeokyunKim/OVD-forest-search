@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper below."
+title: "ovd-under-canopy: open-vocabulary detection of missing persons and belongings under forest canopy"
+abstract: >-
+  Code for the NeurIPS 2026 VLM4RWD workshop paper. Four open-vocabulary
+  detectors are fine-tuned with LoRA on a six-class forest search-and-rescue
+  benchmark and measured under one frozen protocol, with query-sensitivity flip
+  rates alongside standard AP.
+type: software
+license: Apache-2.0
+authors:
+  - family-names: "Kim"
+    given-names: "Deokyun"
+  - family-names: "Lee"
+    given-names: "Giyoung"
+  - family-names: "Kim"
+    given-names: "Yookyung"
+  - family-names: "Ki"
+    given-names: "Myungseok"
+  - family-names: "Cha"
+    given-names: "Jihun"
+repository-code: "https://github.com/DeokyunKim/OVD-forest-search"
+keywords:
+  - open-vocabulary detection
+  - search and rescue
+  - vision-language models
+  - catastrophic forgetting
+  - LoRA
+preferred-citation:
+  type: conference-paper
+  title: "Query-Composition Sensitivity of Open-Vocabulary Detectors in Under-Canopy Search and Rescue"
+  authors:
+    - family-names: "Kim"
+      given-names: "Deokyun"
+    - family-names: "Lee"
+      given-names: "Giyoung"
+    - family-names: "Kim"
+      given-names: "Yookyung"
+    - family-names: "Ki"
+      given-names: "Myungseok"
+    - family-names: "Cha"
+      given-names: "Jihun"
+  year: 2026
+  collection-title: "NeurIPS 2026 Workshop on Vision-Language Models for Real-World Deployment (VLM4RWD)"

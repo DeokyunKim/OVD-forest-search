@@ -1,0 +1,23 @@
+# One cell of the published grid: glip, seed 1.
+#
+# The paper reports mean and sd over seeds 0, 1 and 2. Fine-tuning again from
+# this file does not return the same weights -- the backward pass uses CUDA
+# kernels with no deterministic implementation -- so the three seeds bound the
+# variation rather than pinning a number. See the reproduction status in README.
+
+model: glip
+seed: 1
+
+train:
+  steps: 5667          # one epoch: 5667 x effective batch 16 >= 90,670 images
+  lora: {rank: 16, alpha: 32}
+  num_workers: 4
+
+eval:
+  conditions:
+    - A1_singleton_person
+    - A4_full_v6
+  label: tiny_c-ft-seed1-rt
+  per_dataset: true
+
+# output_dir defaults to checkpoints/glip/seed1

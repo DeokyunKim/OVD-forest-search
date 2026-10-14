@@ -1,0 +1,126 @@
+# glip: the environment the published results were produced on, read with
+# `pip freeze` rather than transcribed. Regenerate with
+# `tools/freeze_requirements.py` (internal) if the environment moves.
+#
+#     python3 -m venv ~/venvs/uc-glip
+#     ~/venvs/uc-glip/bin/pip install -r requirements/glip.txt -e .
+#
+# torch carries a `+cu118` local version, which PyPI does not
+# serve. The index below is required, not optional.
+--extra-index-url https://download.pytorch.org/whl/cu118
+#
+# Then, from a checkout, because GLIP's model configs are data files read from
+# it rather than importable code:
+#
+#     git clone https://github.com/open-mmlab/mmdetection && cd mmdetection
+#     git checkout cfd5d3a9
+#
+# ONE EDIT IS REQUIRED before it will import. mmdet 3.3.0 caps mmcv below 2.2.0,
+# and the pin above is exactly 2.2.0, so `import mmdet` raises
+#
+#     AssertionError: MMCV==2.2.0 is used but incompatible.
+#                     Please install mmcv>=2.0.0rc4, <2.2.0.
+#
+# In mmdet/__init__.py, raise the upper bound past the pin:
+#
+#     -mmcv_maximum_version = '2.2.0'
+#     +mmcv_maximum_version = '2.3.0'
+#
+# The bound is exclusive and 2.2.0 is its boundary value, so this admits the one
+# version the published GLIP numbers were produced with and nothing further. The
+# alternative -- pinning mmcv below 2.2.0 -- installs a combination this
+# benchmark has never run.
+#
+#     pip install -e .                          # UC_MMDET_ROOT points here
+
+accelerate==1.14.0
+addict==2.4.0
+aliyun-python-sdk-core==2.16.0
+aliyun-python-sdk-kms==2.16.5
+certifi==2026.1.4
+cffi==2.0.0
+charset-normalizer==3.4.4
+click==8.3.1
+colorama==0.4.6
+contourpy==1.3.2
+crcmod==1.7
+cryptography==46.0.3
+cycler==0.12.1
+exceptiongroup==1.3.1
+filelock==3.14.0
+fonttools==4.61.1
+fsspec==2025.12.0
+hf-xet==1.6.0
+huggingface_hub==0.36.2
+idna==3.11
+iniconfig==2.3.0
+Jinja2==3.1.3
+jmespath==0.10.0
+kiwisolver==1.4.9
+markdown-it-py==4.0.0
+Markdown==3.10
+MarkupSafe==2.1.5
+matplotlib==3.10.8
+mdurl==0.1.2
+mmcv==2.2.0
+mmengine==0.10.7
+model-index==0.1.11
+mpmath==1.3.0
+networkx==3.4.2
+numpy==2.2.6
+nvidia-cublas-cu11==11.11.3.6
+nvidia-cuda-cupti-cu11==11.8.87
+nvidia-cuda-nvrtc-cu11==11.8.89
+nvidia-cuda-runtime-cu11==11.8.89
+nvidia-cudnn-cu11==9.1.0.70
+nvidia-cufft-cu11==10.9.0.58
+nvidia-curand-cu11==10.3.0.86
+nvidia-cusolver-cu11==11.4.1.48
+nvidia-cusparse-cu11==11.7.5.86
+nvidia-nccl-cu11==2.20.5
+nvidia-nvtx-cu11==11.8.86
+opencv-python==4.12.0.88
+opendatalab==0.0.10
+openmim==0.3.9
+openxlab==0.1.3
+ordered-set==4.1.0
+oss2==2.17.0
+packaging==24.2
+pandas==2.3.3
+peft==0.13.2
+pillow==12.0.0
+platformdirs==4.5.1
+pluggy==1.6.0
+psutil==7.2.2
+pycocotools==2.0.11
+pycparser==2.23
+pycryptodome==3.23.0
+Pygments==2.19.2
+pyparsing==3.3.1
+pytest==9.1.1
+python-dateutil==2.9.0.post0
+pytz==2023.4
+PyYAML==6.0.3
+regex==2026.7.19
+requests==2.28.2
+rich==13.4.2
+safetensors==0.8.0
+scipy==1.15.3
+shapely==2.1.2
+six==1.17.0
+sympy==1.13.1
+tabulate==0.9.0
+termcolor==3.3.0
+terminaltables==3.1.10
+tokenizers==0.19.1
+tomli==2.4.0
+torch==2.4.1+cu118
+torchaudio==2.4.1+cu118
+torchvision==0.19.1+cu118
+tqdm==4.65.2
+transformers==4.43.3
+triton==3.0.0
+typing_extensions==4.15.0
+tzdata==2025.3
+urllib3==1.26.20
+yapf==0.43.0

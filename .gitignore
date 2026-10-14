@@ -1,0 +1,32 @@
+# Datasets are never committed. `data/` holds symlinks created by
+# ./link_datasets.sh pointing at wherever the corpora actually live on
+# your machine; the directory itself is tracked only through .gitkeep.
+data/*
+!data/.gitkeep
+
+# Everything a run produces. Fragments, detection dumps, checkpoints, figures
+# and tables are all regenerable from the commands in README.md, and the dumps
+# alone run to gigabytes.
+outputs/
+checkpoints/
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+.DS_Store
+
+# Locally generated validation configs. They name adapters in whichever tree
+# trained them, so they are machine-specific by construction and are never
+# committed; configs/validation/README.md explains how to regenerate them.
+configs/validation/*.yaml
+tools/validation_env.sh
+
+# Transient per-cell fan-out from an in-flight campaign; the recipe is the
+# sixteen arm configs beside them.
+configs/reproduce/w[0-9]_*.yaml

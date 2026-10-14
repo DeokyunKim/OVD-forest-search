@@ -1,0 +1,68 @@
+# Model variants the benchmark evaluates.
+#
+# One entry per (architecture, arm) the paper reports, and nothing else. The
+# research tree this came from carried 28 GroundingDINO variants -- PoC arms,
+# hinge sweeps, fusion experiments -- each with an absolute path to one machine.
+# They are not here: a reader cannot use them and a dead path in a public
+# repository is a bug report waiting to happen.
+#
+# `${external_repo}` and `${checkpoint_root}` are interpolated. The first is
+# UC_GDINO_REPO, a checkout of the upstream GroundingDINO repository, which
+# cannot be vendored because MultiScaleDeformableAttention is a compiled CUDA
+# op. The second is `checkpoint_root` from configs/paths.yaml.
+
+external_repo: ${UC_GDINO_REPO}
+base_checkpoint: ${external_repo}/groundingdino_swint_ogc.pth
+device: cuda:0
+caption: "person . clothes . hat . shoes . gloves . bag ."
+
+variants:
+  # The zero-shot arm. `swinb_zeroshot` in the detector maps here; the
+  # fine-tuned arm is the same entry plus --v6-adapter, which is the only
+  # difference between the two arms by design.
+  swinb_dt_base:
+    config: model/groundingdino_swinb_dt_forward.py
+    checkpoint: ${checkpoint_root}/gdino/groundingdino_swinb_cogcoor.pth
+    kind: base
+
+# ---------------------------------------------------------------------------
+# Per-model settings that were previously spread across four Python modules: a
+# default-variant dict and an extra-arguments dict in eval.py, a per-device
+# batch table in the training schedule, and a config path built from a bare
+# environment read inside the GLIP detector.
+#
+# They belong here because they describe WHAT is measured. `max_output_detections`
+# especially: it widens the candidate pool the protocol's per-category cap of 100
+# selects from, so it is part of the published read-out. A reader who opens this
+# file should see it.
+#
+# `${UC_*}` tokens are interpolated from the environment and RAISE when unset --
+# there is no empty-string fallback, because a required path that defaults to
+# nothing composes into a plausible path that resolves to nothing.
+models:
+  gdino:
+    variant: swinb_zeroshot
+    per_device_batch: 2
+    # max_output_detections: absent. Grounding DINO's decoder emits 900 queries,
+    # already far above the cap.
+
+  owlv2:
+    variant: large
+    per_device_batch: 4
+    max_output_detections: 500
+
+  glip:
+    variant: tiny_c
+    per_device_batch: 2
+    max_output_detections: 500
+    # The mmdet checkout holding GLIP's model configs. They are data files, not
+    # importable code, so a pip-installed mmdet is not enough.
+    mmdet_root: ${UC_MMDET_ROOT}
+    mmdet_config: configs/glip/glip_atss_swin-t_c_fpn_dyhead_pretrain_obj365-goldg.py
+    checkpoint: glip_tiny_c_mmdet-2fc427dd.pth
+
+  omdet:
+    variant: swin-tiny
+    per_device_batch: 8
+    # max_output_detections: absent, and refused if passed. The decoder emits a
+    # fixed query set, so there is no larger pool for the cap to select from.

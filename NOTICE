@@ -1,0 +1,70 @@
+ovd-under-canopy
+Copyright 2026 The ovd-under-canopy authors
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+--------------------------------------------------------------------------------
+Why Apache-2.0
+
+This benchmark is built on four open-vocabulary detectors, and the licence
+follows theirs rather than being chosen independently. Every upstream component
+below was checked against the licence file or package metadata on the machine
+the results were produced on, not from memory:
+
+  Grounding DINO      Apache-2.0   (LICENSE in the upstream checkout)
+  mmdetection         Apache-2.0   (package metadata; provides GLIP)
+  transformers        Apache-2.0   (package metadata; provides OWLv2, OmDet-Turbo)
+  PEFT                Apache-2.0   (package metadata)
+
+GLIP's original release from Microsoft is MIT, which is more permissive than
+Apache-2.0 and imposes nothing that conflicts with it; this repository calls
+mmdetection's port rather than that code directly. Apache-2.0 is therefore the
+most restrictive licence in the stack and the one the combined work can carry.
+
+One exception aside, none of these projects is vendored here: this repository
+imports them, so what it distributes is its own code plus the attributions
+below. The exception is part of `models/gdino/lora`, carried because the checkout
+it used to be imported from has never committed those files -- see that
+package's docstring, and the entry under Third-party code.
+
+--------------------------------------------------------------------------------
+Third-party code and models
+
+Grounding DINO -- IDEA-Research, Apache-2.0
+  https://github.com/IDEA-Research/GroundingDINO
+  Required as an external checkout (UC_GDINO_REPO): the deformable-attention
+  CUDA op is compiled against your torch and cannot be vendored.
+  `configs/model/groundingdino_swinb_dt_forward.py` overrides that repository's
+  model config and is a derivative work of it.
+
+models/gdino/lora -- the vendored part of it, and the only vendored code here
+  `layer.py` is Microsoft's LoRA reference implementation, MIT, header intact.
+  `multi_head_attention.py` and the two helpers in `utils.py` are adapted from
+  DitHub (Cappellino et al., "DitHub: A Modular Framework for Incremental
+  Open-Vocabulary Object Detection", NeurIPS 2025, arXiv:2503.09271) by the
+  authors of the Grounding DINO fork this work fine-tunes, and carry that
+  attribution in their headers.
+  https://github.com/chiara-cap/dithub
+  Carried rather than imported because the fork never committed them: without
+  them the published adapters cannot be loaded at all.
+
+GLIP -- Microsoft, MIT (original) / mmdetection, Apache-2.0 (the port used here)
+  https://github.com/microsoft/GLIP
+  https://github.com/open-mmlab/mmdetection
+
+OWLv2 -- Google Research, Apache-2.0, via HuggingFace transformers
+  https://github.com/google-research/scenic/tree/main/scenic/projects/owl_vit
+
+OmDet-Turbo -- OmAI Lab, Apache-2.0, via HuggingFace transformers
+  https://github.com/om-ai-lab/OmDet
+
+Model weights carry their own licences and are downloaded, not redistributed
+here. Check each before use; a licence that permits research use does not
+always permit deployment.
+
+--------------------------------------------------------------------------------
+Datasets
+
+ForestPersons and ForestBelongings are released separately under their own
+terms. See DATA.md. COCO 2017 is used only for the zero-shot retention
+measurement and is subject to its own licence.
